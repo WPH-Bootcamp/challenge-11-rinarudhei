@@ -1,4 +1,5 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/3LBkOAqm)
+
 # Challenge 11: Music Player Motion Component
 
 Halo team! Selamat datang di challenge ke-11. Kali ini kita akan belajar membuat komponen music player dengan animasi yang smooth dan interaktif menggunakan Motion (Framer Motion) dan React.
@@ -6,6 +7,7 @@ Halo team! Selamat datang di challenge ke-11. Kali ini kita akan belajar membuat
 ## Tentang Challenge Ini
 
 Challenge ini dirancang untuk mengasah kemampuanmu dalam:
+
 - Mengimplementasikan animasi yang kompleks dengan Motion
 - Mengelola state untuk berbagai kondisi komponen
 - Membuat transisi yang smooth antar state
@@ -34,6 +36,7 @@ Extended typography classes tersedia di `tailwind.config.ts`. Contohnya, kamu bi
 ### Spacing System
 
 Custom spacing unit sudah diset ke 1px ratio (1:1) bukan default Tailwind yang 4px (1:4). Ini berarti:
+
 - `p-1` = 1px (bukan 4px)
 - `p-4` = 4px (bukan 16px)
 - `p-16` = 16px (bukan 64px)
@@ -55,6 +58,7 @@ Music player harus memiliki tiga state yang berbeda:
 #### Background & Shadow Transitions
 
 Animasikan background color dan box shadow container berdasarkan state:
+
 - Duration: 300ms
 - Easing: Default ease
 - Terapkan shadow yang berbeda untuk playing (purple glow) vs paused states
@@ -71,6 +75,7 @@ Animasikan background color dan box shadow container berdasarkan state:
 #### Scale Transitions
 
 Animasikan perubahan scale antar state:
+
 - Playing: `scale(1)`
 - Paused: `scale(0.95)`
 - Loading: `scale(0.9)`
@@ -82,6 +87,7 @@ Animasikan perubahan scale antar state:
 #### Individual Bar Animation (Playing State)
 
 Setiap bar harus animasi secara independen:
+
 - Property: Height (dari 20% ke 100%)
 - Duration: 500ms per cycle
 - Direction: Alternate (bolak-balik)
@@ -91,6 +97,7 @@ Setiap bar harus animasi secara independen:
 #### Stagger Effect
 
 Buat efek wave dengan stagger animations:
+
 - Delay: 100ms
 - Contoh: Bar 1 (0ms), Bar 2 (100ms), Bar 3 (200ms), dst.
 
@@ -125,6 +132,7 @@ Buat efek wave dengan stagger animations:
 ### State Change Sequence
 
 Saat toggle antara playing dan paused:
+
 1. Button masuk ke loading state
 2. Tunggu 500ms (simulasi async operation)
 3. Transisi ke state baru
@@ -181,16 +189,19 @@ Implementasimu akan dievaluasi berdasarkan:
 ## Getting Started
 
 1. Install dependencies:
+
 ```bash
 npm install
 ```
 
 2. Install required libraries:
+
 ```bash
 npm install motion lucide-react
 ```
 
 3. Run development server:
+
 ```bash
 npm run dev
 ```
