@@ -3,7 +3,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  
+
   /* Design System Colors - Tambahkan warna sesuai kebutuhan dari Figma */
   /* Contoh struktur warna yang bisa digunakan */
   --color-purple-500: #a855f7;
@@ -16,14 +16,21 @@
 }
 
 @theme inline {
+  --font-sans: "Poppins", sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-  
+  --color-primary-200: #8b5cf6;
+
   /* Custom spacing dengan 1px ratio (1:1 bukan 1:4) */
   /* p-1 = 1px, p-4 = 4px, p-16 = 16px */
-  /* Spacing sudah dikonfigurasi di tailwind.config.ts */
+  /* Font Weights */
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,8 +40,100 @@
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Display sizes */
+  .display-3xl {
+    font-size: 3.75rem; /* 60px */
+    line-height: 4.5rem; /* 72px */
+    letter-spacing: -0.03em;
+  }
+
+  .display-2xl {
+    font-size: 3rem; /* 48px */
+    line-height: 3.75rem; /* 60px */
+    letter-spacing: -0.03em;
+  }
+
+  .display-xl {
+    font-size: 2.5rem; /* 40px */
+    line-height: 3rem; /* 48px */
+    letter-spacing: -0.03em;
+  }
+
+  .display-lg {
+    font-size: 2.25rem; /* 36px */
+    line-height: 2.75rem; /* 44px */
+    letter-spacing: -0.03em;
+  }
+
+  .display-md {
+    font-size: 2rem; /* 32px */
+    line-height: 2.5rem; /* 40px */
+    letter-spacing: -0.03em;
+  }
+
+  .display-sm {
+    font-size: 1.75rem; /* 28px */
+    line-height: 2.375rem; /* 38px */
+    letter-spacing: -0.03em;
+  }
+
+  .display-xs {
+    font-size: 1.5rem; /* 24px */
+    line-height: 2.25rem; /* 36px */
+    letter-spacing: -0.03em;
+  }
+
+  /* Text sizes */
+  .text-xl {
+    font-size: 1.25rem; /* 20px */
+    line-height: 2.125rem; /* 34px */
+    letter-spacing: -0.03em;
+  }
+
+  .text-lg {
+    font-size: 1.125rem; /* 18px */
+    line-height: 2rem; /* 32px */
+    letter-spacing: -0.03em;
+  }
+
+  .text-md {
+    font-size: 1rem; /* 16px */
+    line-height: 1.875rem; /* 30px */
+    letter-spacing: -0.03em;
+  }
+
+  .text-sm {
+    font-size: 0.875rem; /* 14px */
+    line-height: 1.75rem; /* 28px */
+    letter-spacing: -0.03em;
+  }
+
+  .text-xs {
+    font-size: 0.75rem; /* 12px */
+    line-height: 1.5rem; /* 24px */
+    letter-spacing: -0.03em;
+  }
+
+  .flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@layer base {
+  body {
+    font-family: "Poppins", sans-serif;
+    background: var(--background);
+    color: var(--foreground);
+  }
+}
+
+@layer utilities {
+  .display-2xl-bold {
+    font-size: 4.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
 }
