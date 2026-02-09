@@ -13,22 +13,15 @@ import {
 import Image from "next/image";
 
 import { motion } from "motion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { msToMinutesSeconds } from "@/utils/utils";
+
+const SONG_DURATION_MS = 100000;
 
 type State = "playing" | "paused" | "loading";
 export function MusicPlayer() {
-  // TODO: Implementasikan state management untuk playing, paused, loading
-
-  // TODO: Implementasikan handler untuk play/pause
-
-  // TODO: Implementasikan komponen music player sesuai desain Figma
-  // Struktur yang perlu dibuat:
-  // - Container dengan background dan shadow animations
-  // - Album artwork dengan rotation dan scale animations
-  // - Equalizer bars dengan stagger effect
-  // - Progress bar dengan fill animation
-  // - Control buttons (play/pause, skip, volume)
   const [state, setState] = useState<State>("paused");
+  const [currentMs, setCurrentMs] = useState<number>(0);
   const barAnimations = [
     { delay: 0.2, duration: 0.8, maxScaleY: 4 },
     { delay: 0.5, duration: 1.2, maxScaleY: 5 },
@@ -36,6 +29,29 @@ export function MusicPlayer() {
     { delay: 0.7, duration: 1.1, maxScaleY: 4 },
     { delay: 0.3, duration: 1.0, maxScaleY: 5 },
   ];
+  const SKIP_STEP = 5000;
+
+  useEffect(() => {
+    if (currentMs >= SONG_DURATION_MS && state === "playing") {
+      return () => {
+        setCurrentMs(0);
+        setState("paused");
+      };
+    }
+  });
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+
+    if (state === "playing") {
+      interval = setInterval(() => {
+        setCurrentMs((prev) => prev + 100);
+      }, 100);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [state]);
 
   const togglePlayButton = () => {
     if (state === "playing") {
@@ -86,7 +102,7 @@ export function MusicPlayer() {
       transition: {
         rotate: {
           duration: 0.3,
-          ease: "linear",
+          type: "spring",
         },
         scale: {
           duration: 0.3,
@@ -99,9 +115,16 @@ export function MusicPlayer() {
   const albumArtVariants = {
     playing: {
       rotate: -360,
+      scale: [1, 1.2, 1],
       transition: {
         rotate: {
           duration: 20,
+          repeat: Infinity,
+          ease: "linear",
+          repeatType: "loop",
+        },
+        scale: {
+          duration: 3,
           repeat: Infinity,
           ease: "linear",
           repeatType: "loop",
@@ -110,10 +133,15 @@ export function MusicPlayer() {
     },
     paused: {
       rotate: 0,
+      scale: 1,
       transition: {
         rotate: {
-          duration: 0,
-          ease: "linear",
+          duration: 0.1,
+          ease: "easeInOut",
+        },
+        scale: {
+          duration: 0.1,
+          ease: "easeInOut",
         },
       },
     },
@@ -141,6 +169,26 @@ export function MusicPlayer() {
         },
       },
     }),
+  };
+
+  const progressBarVariants = {
+    playing: {
+      scaleX: currentMs / SONG_DURATION_MS,
+      transition: {
+        scaleX: {
+          duration: 0.1,
+          ease: "linear",
+        },
+      },
+    },
+    paused: {
+      scaleX: currentMs / SONG_DURATION_MS,
+      transition: {
+        scaleX: {
+          duration: 0,
+        },
+      },
+    },
   };
 
   return (
@@ -192,12 +240,20 @@ export function MusicPlayer() {
       </div>
 
       {/* Progres Bar */}
-      <div className="w-full h-2 rounded-full bg-neutral-800" />
+      <div className="w-full h-2 rounded-full bg-neutral-800">
+        <motion.div
+          className="h-full rounded-bl-full rounded-tl-full bg-primary-200"
+          variants={progressBarVariants}
+          style={{ originX: 0 }}
+          initial={{ scaleX: 0 }}
+          animate={state}
+        />
+      </div>
 
       {/* Duration Info */}
       <div className="flex justify-between items-center text-xs text-neutral-500">
-        <p>1:23</p>
-        <p>3:45</p>
+        <p>{msToMinutesSeconds(currentMs)}</p>
+        <p>{msToMinutesSeconds(SONG_DURATION_MS)}</p>
       </div>
 
       {/* Controls */}
@@ -205,7 +261,12 @@ export function MusicPlayer() {
         <div className="w-9 h-9 p-0 m-0 flex-center">
           <Shuffle size={20} className="text-neutral-300" />
         </div>
-        <div className="w-9 h-9 p-0 m-0 flex-center">
+        <div
+          className="w-9 h-9 p-0 m-0 flex-center"
+          onClick={() =>
+            setCurrentMs((prev) => (prev < SKIP_STEP ? 0 : prev - SKIP_STEP))
+          }
+        >
           <SkipBack size={20} className="text-neutral-300" />
         </div>
         <button
@@ -229,7 +290,16 @@ export function MusicPlayer() {
             </motion.div>
           )}
         </button>
-        <div className="w-9 h-9 p-0 m-0 flex-center">
+        <div
+          className="w-9 h-9 p-0 m-0 flex-center"
+          onClick={() =>
+            setCurrentMs((prev) =>
+              prev > SONG_DURATION_MS - SKIP_STEP
+                ? SONG_DURATION_MS
+                : prev + SKIP_STEP,
+            )
+          }
+        >
           <SkipForward size={20} className="text-neutral-300" />
         </div>
         <div className="w-9 h-9 p-0 m-0 flex-center">
