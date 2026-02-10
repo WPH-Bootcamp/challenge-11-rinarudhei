@@ -15,21 +15,16 @@ import Image from "next/image";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { msToMinutesSeconds } from "@/utils/utils";
+import { barAnimations, SKIP_STEP } from "@/utils/constants";
+import { State } from "@/types/types";
 
 const SONG_DURATION_MS = 100000;
+const VOLUME = 0.7;
 
-type State = "playing" | "paused" | "loading";
 export function MusicPlayer() {
   const [state, setState] = useState<State>("paused");
   const [currentMs, setCurrentMs] = useState<number>(0);
-  const barAnimations = [
-    { delay: 0.2, duration: 0.8, maxScaleY: 4 },
-    { delay: 0.5, duration: 1.2, maxScaleY: 5 },
-    { delay: 0, duration: 0.9, maxScaleY: 6 },
-    { delay: 0.7, duration: 1.1, maxScaleY: 4 },
-    { delay: 0.3, duration: 1.0, maxScaleY: 5 },
-  ];
-  const SKIP_STEP = 5000;
+  const [volume] = useState<number>(VOLUME);
 
   useEffect(() => {
     if (currentMs >= SONG_DURATION_MS && state === "playing") {
@@ -195,7 +190,7 @@ export function MusicPlayer() {
     <motion.div
       variants={musicPlayerCardVariants}
       animate={state}
-      className="flex flex-col w-full max-w-125 rounded-2xl gap-5 p-4 "
+      className="flex flex-col w-full max-w-125 rounded-2xl gap-5 p-4"
     >
       {/* Song Info */}
       <div className="flex flex-col gap-4">
@@ -308,9 +303,19 @@ export function MusicPlayer() {
       </div>
 
       {/* Volume Control */}
-      <div className="flex justify-between gap-2 items-center">
+      <div className="group flex justify-between gap-2 items-center">
         <Volume2 className="text-neutral-400" size={16} />
-        <div className="w-full h-1 rounded-full bg-neutral-800" />
+        <div className="w-full h-1 rounded-full bg-neutral-800 relative cursor-pointer">
+          <motion.div
+            animate={{ scaleX: volume }}
+            style={{ originX: 0 }}
+            className="h-1 rounded-bl-full rounded-tl-full bg-neutral-500"
+          ></motion.div>
+          <motion.div
+            animate={{ x: volume * 443 }}
+            className="hidden group-hover:block w-2 h-2 rounded-full bg-white absolute -top-px"
+          />
+        </div>
       </div>
     </motion.div>
   );
